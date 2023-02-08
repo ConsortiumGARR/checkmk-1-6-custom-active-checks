@@ -1,0 +1,45 @@
+#!/usr/bin/env python3
+# -*- encoding: utf-8; py-indent-offset: 4 -*-
+
+# Check_MK Check validUntil
+#
+# Copyright 2023, Marco Malavolti <marco.malavolti[at]garr.it>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+def check_validUntil_desc(params):
+    if params.get("description"):
+        return "%s" % params["description"]
+    return "Check validUntil"
+
+def check_validUntil_arguments(params):
+
+    args = ""
+
+    if "url" in params:
+        args += "--url %s" % quote_shell_string(params["url"])
+    else:
+        args += "--url https://mdx.idem.garr.it/idem/entities/https:%2F%2Fwiki.idem.garr.it%2Frp"
+
+    if "hours" in params:
+        args += " --hours %s" % (params["hours"])
+    else:
+        args += " --hours 4"
+
+    return args
+
+active_check_info['validUntil'] = {
+    "command_line"        : '$USER2$/check_validUntil.py',
+    "argument_function"   : check_validUntil_arguments,
+    "service_description" : check_validUntil_desc,
+    "has_perfdata"        : True,
+}
